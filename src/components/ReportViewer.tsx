@@ -19,7 +19,7 @@ export const ReportViewer = ({ test, open, onClose, onDownload }: ReportViewerPr
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl">
-              Pharmacogenomics Report - {test.employeeName}
+              Metabolic Syndrome Genetic Risk Report - {test.employeeName}
             </DialogTitle>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={onDownload} className="gap-2">
@@ -37,7 +37,7 @@ export const ReportViewer = ({ test, open, onClose, onDownload }: ReportViewerPr
           <div className="max-w-3xl mx-auto space-y-6">
             <div className="text-center border-b pb-6">
               <h1 className="text-3xl font-bold text-primary mb-2">GenePowerX</h1>
-              <h2 className="text-xl font-semibold text-foreground">Pharmacogenomics Test Report</h2>
+              <h2 className="text-xl font-semibold text-foreground">Metabolic Syndrome Genetic Risk Report</h2>
             </div>
 
             <div className="space-y-4">
@@ -63,39 +63,93 @@ export const ReportViewer = ({ test, open, onClose, onDownload }: ReportViewerPr
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-foreground">Executive Summary</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  This pharmacogenomics test analyzes genetic variations that may affect medication response. 
-                  The results help healthcare providers personalize medication selection and dosing for optimal efficacy and safety.
+                  This comprehensive genetic risk assessment analyzes polygenic and monogenic markers associated with metabolic syndrome components. 
+                  The results provide personalized insights into disease risk, metabolic pathways, and actionable recommendations for preventive health interventions.
                 </p>
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">Drug-Gene Interactions</h3>
+                <h3 className="text-lg font-semibold text-foreground">Genetic Risk Assessment</h3>
                 <div className="space-y-3">
                   {[
-                    { drug: 'Clopidogrel', gene: 'CYP2C19', result: 'Normal Metabolizer', recommendation: 'Standard dosing recommended' },
-                    { drug: 'Warfarin', gene: 'CYP2C9, VKORC1', result: 'Increased Sensitivity', recommendation: 'Consider lower initial dose' },
-                    { drug: 'Simvastatin', gene: 'SLCO1B1', result: 'Normal Function', recommendation: 'Standard dosing appropriate' },
+                    { condition: 'Coronary Artery Disease (CAD)', risk: 'Moderate Risk', score: '45%', genes: 'APOE, LPA, PCSK9' },
+                    { condition: 'Type 2 Diabetes', risk: 'Low Risk', score: '18%', genes: 'TCF7L2, PPARG, KCNJ11' },
+                    { condition: 'Fatty Liver/MASLD', risk: 'Elevated Risk', score: '62%', genes: 'PNPLA3, TM6SF2, GCKR' },
+                    { condition: 'Dyslipidemia', risk: 'Moderate Risk', score: '38%', genes: 'APOB, LDLR, CETP' },
+                    { condition: 'Obesity', risk: 'Low Risk', score: '22%', genes: 'FTO, MC4R, BDNF' },
+                    { condition: 'Hypertension', risk: 'Moderate Risk', score: '41%', genes: 'AGT, ACE, CYP11B2' },
                   ].map((item, index) => (
                     <div key={index} className="border rounded-lg p-4 bg-card">
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-semibold text-foreground">{item.drug}</h4>
-                        <Badge className="bg-primary text-primary-foreground">{item.result}</Badge>
+                        <h4 className="font-semibold text-foreground">{item.condition}</h4>
+                        <Badge className={
+                          item.risk === 'Elevated Risk' ? 'bg-warning text-warning-foreground' :
+                          item.risk === 'Moderate Risk' ? 'bg-primary text-primary-foreground' :
+                          'bg-success text-success-foreground'
+                        }>{item.risk}</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-1">Gene: {item.gene}</p>
-                      <p className="text-sm text-foreground">{item.recommendation}</p>
+                      <p className="text-sm text-muted-foreground mb-1">Risk Score: {item.score}</p>
+                      <p className="text-sm text-muted-foreground">Key Genes: {item.genes}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-foreground">Clinical Recommendations</h3>
-                <div className="bg-secondary p-4 rounded-lg">
+                <h3 className="text-lg font-semibold text-foreground">Metabolic Pathway Insights</h3>
+                <div className="bg-secondary p-4 rounded-lg space-y-3">
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Lipid Metabolism</h4>
+                    <p className="text-sm text-muted-foreground">Genetic variants suggest moderate efficiency in lipid processing. Consider omega-3 supplementation and regular monitoring of lipid panels.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Glucose Regulation</h4>
+                    <p className="text-sm text-muted-foreground">Strong genetic profile for glucose homeostasis. Maintain current lifestyle with emphasis on complex carbohydrates.</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Inflammation Response</h4>
+                    <p className="text-sm text-muted-foreground">Elevated inflammatory markers detected. Anti-inflammatory diet rich in polyphenols recommended.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-foreground">Personalized Recommendations</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-card border rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                      <span className="text-accent">🥗</span> Nutrition
+                    </h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• Mediterranean diet pattern</li>
+                      <li>• Increase omega-3 fatty acids</li>
+                      <li>• Limit saturated fats to &lt;7% calories</li>
+                      <li>• Focus on low-glycemic foods</li>
+                    </ul>
+                  </div>
+                  <div className="bg-card border rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                      <span className="text-accent">🏃</span> Fitness
+                    </h4>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• 150+ min moderate aerobic activity/week</li>
+                      <li>• Strength training 2-3x per week</li>
+                      <li>• HIIT training beneficial for lipid profile</li>
+                      <li>• Focus on cardiovascular endurance</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-foreground">Early Intervention Protocols</h3>
+                <div className="bg-accent/10 border border-accent/20 p-4 rounded-lg">
                   <ul className="space-y-2 text-sm text-foreground">
-                    <li>• Consult with healthcare provider before making any medication changes</li>
-                    <li>• Share this report with all treating physicians</li>
-                    <li>• Results are valid for lifetime as genetic information doesn't change</li>
-                    <li>• Additional testing may be warranted for specific medications</li>
+                    <li>• <strong>Immediate:</strong> Schedule comprehensive metabolic panel and liver function tests</li>
+                    <li>• <strong>3 Months:</strong> Follow-up lipid panel and hepatic elastography if indicated</li>
+                    <li>• <strong>6 Months:</strong> Reassess lifestyle modifications and metabolic markers</li>
+                    <li>• <strong>Annually:</strong> Complete metabolic screening and genetic counseling review</li>
+                    <li>• <strong>Ongoing:</strong> Work with healthcare provider for personalized prevention strategy</li>
                   </ul>
                 </div>
               </div>

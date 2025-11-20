@@ -51,10 +51,10 @@ const Index = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-foreground mb-2">
-            Pharmacogenomics Test Dashboard
+            Metabolic Syndrome Genetic Risk Dashboard
           </h2>
           <p className="text-muted-foreground">
-            Manage and view employee pharmacogenomics test results
+            Manage and view employee metabolic health genetic risk assessments
           </p>
         </div>
 
