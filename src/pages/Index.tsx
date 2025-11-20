@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Header } from '@/components/Header';
-import { TestCard } from '@/components/TestCard';
+import { TestsTable } from '@/components/TestsTable';
 import { ReportViewer } from '@/components/ReportViewer';
 import { SettingsDialog } from '@/components/SettingsDialog';
+import { OrderTestDialog } from '@/components/OrderTestDialog';
 import { mockTests, mockCorporateSettings } from '@/data/mockData';
 import { EmployeeTest, CorporateSettings } from '@/types/test';
 import { useToast } from '@/hooks/use-toast';
-import { FileText, Users } from 'lucide-react';
+import { FileText, Users, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const [tests, setTests] = useState<EmployeeTest[]>(mockTests);
@@ -14,6 +16,7 @@ const Index = () => {
   const [selectedTest, setSelectedTest] = useState<EmployeeTest | null>(null);
   const [showReportViewer, setShowReportViewer] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showOrderDialog, setShowOrderDialog] = useState(false);
   const { toast } = useToast();
 
   const handleViewReport = (test: EmployeeTest) => {
@@ -27,6 +30,21 @@ const Index = () => {
       description: `Downloading report for ${test.employeeName}`,
     });
     // In a real app, this would trigger an actual download
+  };
+
+  const handleOrderTest = (employeeName: string, employeeId: string) => {
+    const newTest: EmployeeTest = {
+      id: `${Date.now()}`,
+      employeeName,
+      employeeId,
+      orderDate: new Date().toISOString().split('T')[0],
+      status: 'pending',
+    };
+    setTests([newTest, ...tests]);
+    toast({
+      title: 'Test Ordered Successfully',
+      description: `Test ordered for ${employeeName} (${employeeId})`,
+    });
   };
 
   const handleSaveSettings = (newSettings: CorporateSettings) => {
@@ -49,13 +67,19 @@ const Index = () => {
       />
 
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-foreground mb-2">
-            Metabolic Syndrome Genetic Risk Dashboard
-          </h2>
-          <p className="text-muted-foreground">
-            Manage and view employee metabolic health genetic risk assessments
-          </p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl font-bold text-foreground mb-2">
+              Metabolic Syndrome Genetic Risk Dashboard
+            </h2>
+            <p className="text-muted-foreground">
+              Manage and view employee metabolic health genetic risk assessments
+            </p>
+          </div>
+          <Button onClick={() => setShowOrderDialog(true)} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Order New Test
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -90,16 +114,11 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tests.map((test) => (
-            <TestCard
-              key={test.id}
-              test={test}
-              onViewReport={handleViewReport}
-              onDownloadReport={handleDownloadReport}
-            />
-          ))}
-        </div>
+        <TestsTable
+          tests={tests}
+          onViewReport={handleViewReport}
+          onDownloadReport={handleDownloadReport}
+        />
       </main>
 
       <ReportViewer
@@ -117,6 +136,12 @@ const Index = () => {
         onClose={() => setShowSettings(false)}
         settings={settings}
         onSave={handleSaveSettings}
+      />
+
+      <OrderTestDialog
+        open={showOrderDialog}
+        onClose={() => setShowOrderDialog(false)}
+        onSubmit={handleOrderTest}
       />
     </div>
   );
